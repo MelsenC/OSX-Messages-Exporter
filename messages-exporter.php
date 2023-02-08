@@ -604,13 +604,35 @@ while ( $message = $messages->fetchArray() ) {
 		p { margin: 0; clear: both; }
 		.t /* timestamp */ { text-align: center; color: #8e8e93; font-variant: small-caps; font-weight: bold; font-size: 9pt; }
 		.b /* byline */ { text-align: left; color: #8e8e93; font-size: 9pt; padding-left: 1ex; padding-top: 1ex; margin-bottom: 2px; }
-		img { max-width: 100%; }
+		img { max-width: 400px; }
+		video { max-width: 400px; }
 		.m /* message */ { text-align: left; color: black; border-radius: 8px; background-color: #e1e1e1; padding: 6px; display: inline-block; max-width: 75%; margin-bottom: 5px; float: left; }
 		.m.s /* self */ { text-align: right; background-color: #007aff; color: white; float: right;}
 
 		</style>
 	</head>
 	<body>
+		<ul>
+			<li>
+				Run this code to regenerate this page:<br>
+				<pre>php ~/Projects/Fork/OSX-Messages-Exporter/messages-exporter.php -o ~/Desktop/Messages/ --match_regex "/^' . $chat_title . '$/"</pre><br>
+				Use <pre>[--date-start YYYY-MM-DD]</pre> for future runs.
+			</li>
+			<li>
+				Convert .heic files by selecting them in finder and running Quick Actions -&gt; Convert Image
+			</li>
+			<li>
+				Open the html file, find and replace ".heic" with ".jpeg"
+			</li>
+			<li>
+				Convert .mov files to .mp4 using ffmpeg:<br>
+				<pre>ffmpeg -i "my-video.MOV" -vcodec h264 -pix_fmt yuv420p "my-video.mp4"</pre>
+			</li>
+			<li>
+				Remember to find and replace .mov with .mp4 within the html file.<br>
+				Also, replace type="video/quicktime" with type="video/mp4"
+			</li>
+		</ul>
 	';
 
 		$files_started[ $html_file ]['last_time'] = 0;
@@ -699,7 +721,7 @@ while ( $message = $messages->fetchArray() ) {
 				$html_embed = '';
 
 				if ( strpos( $message['attachment_mime_type'], 'image' ) === 0 ) {
-					$html_embed = '<img src="' . $chat_title_for_filesystem . '/' . $attachment_filename . '" />';
+					$html_embed = '<a href="' . $chat_title_for_filesystem . '/' . $attachment_filename . '"><img src="' . $chat_title_for_filesystem . '/' . $attachment_filename . '" /></a>';
 				}
 				else {
 					if ( strpos( $message['attachment_mime_type'], 'video' ) === 0 ) {
